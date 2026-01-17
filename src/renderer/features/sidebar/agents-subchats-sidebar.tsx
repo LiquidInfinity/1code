@@ -34,6 +34,7 @@ import {
   useAgentSubChatStore,
   type SubChatMeta,
 } from "../agents/stores/sub-chat-store"
+import { useShallow } from "zustand/react/shallow"
 import {
   PlusIcon,
   ArchiveIcon,
@@ -103,15 +104,16 @@ export function AgentsSubChatsSidebar({
   isLoading = false,
   agentName,
 }: AgentsSubChatsSidebarProps) {
-  const activeSubChatId = useAgentSubChatStore((state) => state.activeSubChatId)
-  const openSubChatIds = useAgentSubChatStore((state) => state.openSubChatIds)
-  const pinnedSubChatIds = useAgentSubChatStore(
-    (state) => state.pinnedSubChatIds,
-  )
-  const allSubChats = useAgentSubChatStore((state) => state.allSubChats)
-  const parentChatId = useAgentSubChatStore((state) => state.chatId)
-  const togglePinSubChat = useAgentSubChatStore(
-    (state) => state.togglePinSubChat,
+  // Use shallow comparison to prevent re-renders when arrays have same content
+  const { activeSubChatId, openSubChatIds, pinnedSubChatIds, allSubChats, parentChatId, togglePinSubChat } = useAgentSubChatStore(
+    useShallow((state) => ({
+      activeSubChatId: state.activeSubChatId,
+      openSubChatIds: state.openSubChatIds,
+      pinnedSubChatIds: state.pinnedSubChatIds,
+      allSubChats: state.allSubChats,
+      parentChatId: state.chatId,
+      togglePinSubChat: state.togglePinSubChat,
+    }))
   )
   const [loadingSubChats] = useAtom(loadingSubChatsAtom)
   const subChatFiles = useAtomValue(subChatFilesAtom)
@@ -154,7 +156,7 @@ export function AgentsSubChatsSidebar({
   // Pending plan approvals from DB - only for open sub-chats
   const { data: pendingPlanApprovalsData } = trpc.chats.getPendingPlanApprovals.useQuery(
     { openSubChatIds },
-    { refetchInterval: 5000, enabled: openSubChatIds.length > 0 }
+    { refetchInterval: 5000, enabled: openSubChatIds.length > 0, placeholderData: (prev) => prev }
   )
   const pendingPlanApprovals = useMemo(() => {
     const set = new Set<string>()
@@ -1092,7 +1094,7 @@ export function AgentsSubChatsSidebar({
         {/* Loading state - centered spinner */}
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
-            <IconSpinner className="w-5 h-5 text-muted-foreground" />
+            <IconSpinner className="w-4 h-4 text-muted-foreground" />
           </div>
         ) : (
           <>

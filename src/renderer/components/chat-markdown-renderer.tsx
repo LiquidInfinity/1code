@@ -442,6 +442,8 @@ export const ChatMarkdownRenderer = memo(function ChatMarkdownRenderer({
         "[&_li>p]:inline [&_li>p]:mb-0",
         // Prevent horizontal overflow on mobile
         "overflow-hidden break-words",
+        // Global spacing: elements before hr get extra bottom margin (for spacing above divider)
+        "[&_p:has(+hr)]:mb-6 [&_ul:has(+hr)]:mb-6 [&_ol:has(+hr)]:mb-6 [&_div:has(+hr)]:mb-6 [&_table:has(+hr)]:mb-6 [&_h1:has(+hr)]:mb-6 [&_h2:has(+hr)]:mb-6 [&_h3:has(+hr)]:mb-6 [&_blockquote:has(+hr)]:mb-6",
         // Global spacing: elements after hr get extra top margin
         "[&_hr+p]:mt-4 [&_hr+ul]:mt-4 [&_hr+ol]:mt-4",
         // Global spacing: elements after code blocks get extra top margin

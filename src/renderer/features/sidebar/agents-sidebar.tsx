@@ -365,13 +365,13 @@ export function AgentsSidebar({
   // File changes stats from DB - only for open sub-chats
   const { data: fileStatsData } = trpc.chats.getFileStats.useQuery(
     { openSubChatIds: allOpenSubChatIds },
-    { refetchInterval: 5000, enabled: allOpenSubChatIds.length > 0 }
+    { refetchInterval: 5000, enabled: allOpenSubChatIds.length > 0, placeholderData: (prev) => prev }
   )
 
   // Pending plan approvals from DB - only for open sub-chats
   const { data: pendingPlanApprovalsData } = trpc.chats.getPendingPlanApprovals.useQuery(
     { openSubChatIds: allOpenSubChatIds },
-    { refetchInterval: 5000, enabled: allOpenSubChatIds.length > 0 }
+    { refetchInterval: 5000, enabled: allOpenSubChatIds.length > 0, placeholderData: (prev) => prev }
   )
 
   // Fetch all projects for git info

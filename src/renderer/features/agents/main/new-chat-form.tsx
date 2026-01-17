@@ -942,7 +942,7 @@ export function NewChatForm({
         </div>
       </div>
 
-      <div className="flex flex-1 items-center justify-center overflow-y-auto relative pb-16">
+      <div className="flex flex-1 items-center justify-center overflow-y-auto relative">
         <div className="w-full max-w-2xl space-y-4 md:space-y-6 relative z-10 px-4">
           {/* Title - only show when project is selected */}
           {validatedProject && (
@@ -983,7 +983,7 @@ export function NewChatForm({
                     isDragOver && "ring-2 ring-primary/50 border-primary/50",
                     isFocused && !isDragOver && "ring-2 ring-primary/50",
                   )}
-                  maxHeight={200}
+                  maxHeight={240}
                   onSubmit={handleSend}
                   contextItems={contextItems}
                 >
@@ -1000,7 +1000,7 @@ export function NewChatForm({
                       onShiftTab={() => setIsPlanMode((prev) => !prev)}
                       placeholder="Plan, @ for context, / for commands"
                       className={cn(
-                        "bg-transparent max-h-[200px] overflow-y-auto p-1",
+                        "bg-transparent max-h-[240px] overflow-y-auto p-1",
                         isMobileFullscreen ? "min-h-[56px]" : "min-h-[44px]",
                       )}
                       onPaste={handlePaste}

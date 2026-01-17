@@ -40,6 +40,7 @@ import {
   useAgentSubChatStore,
   type SubChatMeta,
 } from "../stores/sub-chat-store"
+import { useShallow } from "zustand/react/shallow"
 import { motion, AnimatePresence } from "motion/react"
 // import { ResizableSidebar } from "@/app/(alpha)/canvas/[id]/{components}/resizable-sidebar"
 import { ResizableSidebar } from "../../../components/ui/resizable-sidebar"
@@ -119,12 +120,14 @@ export function AgentsContent() {
   subChatQuickSwitchOpenRef.current = subChatQuickSwitchOpen
   subChatQuickSwitchSelectedIndexRef.current = subChatQuickSwitchSelectedIndex
 
-  // Get sub-chats from store
-  const allSubChats = useAgentSubChatStore((state) => state.allSubChats)
-  const openSubChatIds = useAgentSubChatStore((state) => state.openSubChatIds)
-  const activeSubChatId = useAgentSubChatStore((state) => state.activeSubChatId)
-  const setActiveSubChat = useAgentSubChatStore(
-    (state) => state.setActiveSubChat,
+  // Get sub-chats from store with shallow comparison
+  const { allSubChats, openSubChatIds, activeSubChatId, setActiveSubChat } = useAgentSubChatStore(
+    useShallow((state) => ({
+      allSubChats: state.allSubChats,
+      openSubChatIds: state.openSubChatIds,
+      activeSubChatId: state.activeSubChatId,
+      setActiveSubChat: state.setActiveSubChat,
+    }))
   )
 
   // Fetch teams for header

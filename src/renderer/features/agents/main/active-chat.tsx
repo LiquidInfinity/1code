@@ -2220,6 +2220,25 @@ function ChatViewInner({
     })
   }, [hasUnapprovedPlan, subChatId, setPendingPlanApprovals])
 
+  // Keyboard shortcut: Cmd+Enter to approve plan
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.key === "Enter" &&
+        e.metaKey &&
+        !e.shiftKey &&
+        hasUnapprovedPlan &&
+        !isStreaming
+      ) {
+        e.preventDefault()
+        handleApprovePlan()
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [hasUnapprovedPlan, isStreaming, handleApprovePlan])
+
   // Clean up pending plan approval when unmounting
   useEffect(() => {
     return () => {
@@ -2999,7 +3018,7 @@ function ChatViewInner({
       {/* Input */}
       <div
         className={cn(
-          "px-2 pb-6 shadow-sm shadow-background relative z-10",
+          "px-2 pb-2 shadow-sm shadow-background relative z-10",
           (isStreaming || changedFilesForSubChat.length > 0) &&
             !(pendingQuestions?.subChatId === subChatId) &&
             "-mt-3 pt-3",
@@ -3022,7 +3041,7 @@ function ChatViewInner({
                   isDragOver && "ring-2 ring-primary/50 border-primary/50",
                   isFocused && !isDragOver && "ring-2 ring-primary/50",
                 )}
-                maxHeight={200}
+                maxHeight={240}
                 onSubmit={handleSend}
                 contextItems={
                   images.length > 0 || files.length > 0 ? (
@@ -3091,7 +3110,7 @@ function ChatViewInner({
                     onShiftTab={() => setIsPlanMode((prev) => !prev)}
                     placeholder="Plan, @ for context, / for commands"
                     className={cn(
-                      "bg-transparent max-h-[200px] overflow-y-auto p-1",
+                      "bg-transparent max-h-[240px] overflow-y-auto p-1",
                       isMobile && "min-h-[56px]",
                     )}
                     onPaste={handlePaste}
@@ -3360,8 +3379,10 @@ function ChatViewInner({
                           size="sm"
                           className="h-7 gap-1.5 rounded-lg"
                         >
-                          <CheckIcon className="w-3.5 h-3.5" />
                           Implement plan
+                          <Kbd className="text-primary-foreground/80">
+                            ⌘↵
+                          </Kbd>
                         </Button>
                       ) : (
                         <AgentSendButton
